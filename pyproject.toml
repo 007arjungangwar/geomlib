@@ -1,0 +1,28 @@
+[project]
+name = "geomlib-advanced"
+version = "0.0.2"
+description = """
+Complete 2D shapes (Point, Line, Circle, Rectangle, Square, Rhombus, Parallelogram, Triangle, Ellipse)
+Complete 3D shapes (Point3D, Sphere, Cube, Cuboid, Cylinder, Cone)
+Mathematical operations (area, perimeter, volume, surface area)
+Geometric relations (intersection, containment, distance)
+Transformations (translation, rotation, scaling)
+Vector operations (dot, cross, magnitude, normalization)
+"""
+authors = [
+  {name="Arjun Singh Gangwar", email="arjungangwariitpkd@email.com"}
+]
+readme = "README.md"
+requires-python = ">=3.7"
+
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+dependencies = [
+"numpy",
+"scipy"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
