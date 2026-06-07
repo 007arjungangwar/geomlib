@@ -1,122 +1,45 @@
-# geomlib
-Complete 2D shapes (Point, Line, Circle, Rectangle, Square, Rhombus, Parallelogram, Triangle, Ellipse) Complete 3D shapes (Point3D, Sphere, Cube, Cuboid, Cylinder, Cone) Mathematical operations (area, perimeter, volume, surface area) Geometric relations, Transformations , Vector operations.
+# GeomLib Advanced
 
-# 📦 GeomLib - Advanced Geometry Library
+GeomLib Advanced is a pure-Python geometry toolkit for 2D and 3D mathematical work. It is designed for students, teachers, competitive programming, simulations, graphics prototypes, CAD-style utilities, and backend services that need dependable geometry formulas without a heavy dependency stack.
 
-A powerful and easy-to-use Python library for performing **2D and 3D geometric computations**.
+## Features
 
----
+### 2D geometry
 
-## ✨ Features
+- Points, vectors, lines, circles, triangles, rectangles, squares, rhombuses, parallelograms, ellipses, polygons
+- Area, perimeter, centroid, midpoint, slope, angle, distance, containment, intersections
+- Coordinate geometry helpers including distance and section formula
+- Transformations including translate, rotate, scale, and reflection
 
-### 🔷 2D Geometry
+### Conic sections
 
-* Point, Line, Circle
-* Square, Rectangle, Rhombus
-* Parallelogram, Triangle, Ellipse
+- Circle and ellipse support
+- Parabola with focus, directrix, latus rectum, parametric points
+- Hyperbola with foci, eccentricity, asymptotes, point checks
 
-### 🔶 3D Geometry
+### 3D geometry
 
-* Point3D, Sphere
-* Cube, Cuboid
-* Cylinder, Cone
+- Point3D, Vector3D, Line3D, Plane
+- Sphere, cube, cuboid, cylinder, cone
+- Volume, surface area, space diagonal, containment
+- Dot product, cross product, scalar triple product, projections, angles
+- Distances between 3D points, points and lines, points and planes, and skew lines
 
-### 📐 Mathematical Operations
+### Formula helpers
 
-* Area, Perimeter
-* Volume, Surface Area
-* Distance calculations
+- Pythagorean theorem
+- Heron's formula
+- Degree/radian conversion
+- 2D and 3D distance formulas
+- Midpoint formula
 
-### 🔍 Geometric Relations
-
-* Intersection checking
-* Containment tests
-
-### 🔄 Transformations
-
-* Translation
-* Rotation
-* Scaling
-
-### ➕ Vector Operations
-
-* Dot product
-* Cross product
-* Magnitude
-* Normalization
-
----
-
-## 📥 Installation
-
-Install directly from PyPI:
+## Installation
 
 ```bash
 pip install geomlib-advanced
 ```
 
----
-
-## 🚀 Quick Start
-
-```python
-from geomlib import Point, Circle, Rectangle, Sphere
-
-# -------------------
-# 2D Geometry
-# -------------------
-circle = Circle(center=Point(0, 0), radius=5)
-
-print("Circle Area:", circle.area())          # 78.54
-print("Circle Perimeter:", circle.perimeter()) # 31.42
-
-# -------------------
-# 3D Geometry
-# -------------------
-sphere = Sphere(center=(0, 0, 0), radius=3)
-
-print("Sphere Volume:", sphere.volume())           # 113.10
-print("Sphere Surface Area:", sphere.surface_area())  # 113.10
-
-# -------------------
-# Shape Relationships
-# -------------------
-rect = Rectangle(Point(0, 0), width=10, height=5)
-
-print("Point inside rectangle:", rect.contains(Point(2, 2)))  # True
-```
-
----
-
-## 💡 Example Output
-
-```
-Circle Area: 78.54
-Circle Perimeter: 31.42
-Sphere Volume: 113.10
-Sphere Surface Area: 113.10
-Point inside rectangle: True
-```
-
----
-
-## 📚 Use Cases
-
-* Educational purposes (learning geometry)
-* Competitive programming
-* Game development (collision detection)
-* Computer graphics and simulations
-* AI/ML projects involving spatial data
-
----
-
-## ⚙️ Requirements
-
-* Python 3.7+
-
----
-
-## 🛠️ Installation from Source
+From source:
 
 ```bash
 git clone https://github.com/007arjungangwar/geomlib.git
@@ -124,31 +47,100 @@ cd geomlib
 pip install .
 ```
 
----
+## Quick Start
 
-## 🤝 Contributing
+```python
+from geomlib import (
+    Circle,
+    Line3D,
+    Plane,
+    Point,
+    Point3D,
+    Polygon,
+    Triangle,
+    Vector2D,
+    Vector3D,
+    section_formula,
+)
 
-Contributions are welcome!
+circle = Circle(Point(0, 0), 5)
+print(circle.area())
+print(circle.perimeter())
 
-1. Fork the repository
-2. Create a new branch
-3. Make your changes
-4. Submit a pull request
+triangle = Triangle(Point(0, 0), Point(3, 0), Point(0, 4))
+print(triangle.area())
+print(triangle.incenter())
+print(triangle.circumradius())
 
----
+polygon = Polygon([Point(0, 0), Point(4, 0), Point(4, 3), Point(0, 3)])
+print(polygon.area())
+print(polygon.centroid())
 
-## 📄 License
+vector = Vector2D(3, 4)
+print(vector.magnitude())
+print(vector.angle_with(Vector2D(1, 0)))
+
+point = section_formula(Point(0, 0), Point(6, 6), 1, 2)
+print(point)
+
+line = Line3D(Point3D(0, 0, 0), Vector3D(1, 1, 1))
+plane = Plane.from_point_normal(Point3D(0, 0, 2), Vector3D(0, 0, 1))
+print(plane.line_intersection(line))
+```
+
+## Curriculum Coverage
+
+The library includes formulas and objects commonly used across school-level and early college geometry:
+
+- Class 10 coordinate geometry: distance, midpoint, section formula, slope, line equations
+- Class 10 mensuration: circle, rectangle, square, triangle, cylinder, cone, sphere, cuboid, cube
+- Class 11 straight lines and conic sections: line relations, parabola, ellipse, hyperbola
+- Class 11 introduction to 3D geometry: 3D points and distance
+- Class 12 vectors and 3D geometry: vectors, dot/cross products, lines, planes, angles, distances
+
+## API Highlights
+
+```python
+from geomlib import Parabola, Hyperbola
+
+parabola = Parabola(Point(0, 0), 2, orientation="up")
+print(parabola.focus())
+print(parabola.directrix())
+
+hyperbola = Hyperbola(Point(0, 0), 3, 2)
+print(hyperbola.eccentricity())
+print(hyperbola.asymptotes())
+```
+
+```python
+from geomlib import Plane, Point3D, Vector3D
+
+plane = Plane.from_points(
+    Point3D(0, 0, 0),
+    Point3D(1, 0, 0),
+    Point3D(0, 1, 0),
+)
+print(plane.distance_to_point(Point3D(0, 0, 5)))
+```
+
+## Development
+
+Run tests:
+
+```bash
+python -m unittest discover -s tests
+```
+
+Build locally:
+
+```bash
+python -m build
+```
+
+## License
 
 This project is licensed under the MIT License.
 
----
+## Author
 
-## 👨‍💻 Author
-
-**Arjun Singh Gangwar**
-
----
-
-## ⭐ Support
-
-If you find this project useful, consider giving it a ⭐ on GitHub!
+Arjun Singh Gangwar

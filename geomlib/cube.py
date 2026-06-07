@@ -52,6 +52,10 @@ class Cube:
     def scale(self, factor: float) -> 'Cube':
         """Scale cube by factor."""
         return Cube(self.center, self.side * factor)
+
+    def translate(self, dx: float, dy: float, dz: float) -> 'Cube':
+        """Translate cube."""
+        return Cube(self.center.translate(dx, dy, dz), self.side)
     
     def __repr__(self) -> str:
         return f"Cube(center={self.center}, side={self.side})"

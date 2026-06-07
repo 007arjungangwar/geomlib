@@ -1,4 +1,18 @@
-from geomlib import Point, Circle, Rectangle, Square, Triangle, Sphere, Point3D
+from geomlib import (
+    Circle,
+    Line3D,
+    Plane,
+    Point,
+    Point3D,
+    Polygon,
+    Rectangle,
+    Sphere,
+    Square,
+    Triangle,
+    Vector2D,
+    Vector3D,
+    section_formula,
+)
 
 def main():
     print("=== 2D Geometry Examples ===\n")
@@ -30,6 +44,15 @@ def main():
     print(f"\nTriangle: {triangle}")
     print(f"Area: {triangle.area()}, Perimeter: {triangle.perimeter():.2f}")
     print(f"Angles: {triangle.angles()}")
+    print(f"Inradius: {triangle.inradius():.2f}")
+
+    polygon = Polygon([Point(0, 0), Point(4, 0), Point(4, 3), Point(0, 3)])
+    print(f"\nPolygon area: {polygon.area()}, centroid: {polygon.centroid()}")
+    print(f"Section formula 1:2 between {p1} and {p2}: {section_formula(p1, p2, 1, 2)}")
+
+    v1 = Vector2D(3, 4)
+    v2 = Vector2D(1, 0)
+    print(f"Vector magnitude: {v1.magnitude()}, angle with x-axis: {v1.angle_with(v2):.2f}")
     
     print("\n=== 3D Geometry Examples ===\n")
     
@@ -43,6 +66,10 @@ def main():
     print(f"\nSphere at {sphere.center} with radius {sphere.radius}")
     print(f"Volume: {sphere.volume():.2f}")
     print(f"Surface Area: {sphere.surface_area():.2f}")
+
+    line3d = Line3D(Point3D(0, 0, 0), Vector3D(1, 1, 1))
+    plane = Plane.from_point_normal(Point3D(0, 0, 2), Vector3D(0, 0, 1))
+    print(f"Line-plane intersection: {plane.line_intersection(line3d)}")
 
 if __name__ == "__main__":
     main()

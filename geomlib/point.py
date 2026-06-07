@@ -15,6 +15,18 @@ class Point:
     def distance_to_origin(self) -> float:
         """Calculate distance from origin (0,0)."""
         return math.sqrt(self.x**2 + self.y**2)
+
+    def magnitude(self) -> float:
+        """Treat the point as a position vector and return its magnitude."""
+        return self.distance_to_origin()
+
+    def dot(self, other: 'Point') -> float:
+        """Treat two points as vectors from the origin and return their dot product."""
+        return self.x * other.x + self.y * other.y
+
+    def cross(self, other: 'Point') -> float:
+        """Treat two points as vectors and return the scalar 2D cross product."""
+        return self.x * other.y - self.y * other.x
     
     def midpoint(self, other: 'Point') -> 'Point':
         """Calculate midpoint between this point and another."""
@@ -58,6 +70,8 @@ class Point:
     
     def __mul__(self, scalar: float) -> 'Point':
         return Point(self.x * scalar, self.y * scalar)
+
+    __rmul__ = __mul__
     
     def __truediv__(self, scalar: float) -> 'Point':
         return Point(self.x / scalar, self.y / scalar)

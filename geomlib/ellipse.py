@@ -46,6 +46,25 @@ class Ellipse:
             c = math.sqrt(self.b**2 - self.a**2)
             return (Point(self.center.x, self.center.y + c),
                     Point(self.center.x, self.center.y - c))
+
+    def major_axis_length(self) -> float:
+        """Return the major axis length."""
+        return 2 * max(self.a, self.b)
+
+    def minor_axis_length(self) -> float:
+        """Return the minor axis length."""
+        return 2 * min(self.a, self.b)
+
+    def directrices(self) -> tuple:
+        """Return directrices as ('x' or 'y', value)."""
+        e = self.eccentricity()
+        if math.isclose(e, 0.0):
+            raise ValueError("A circle has no finite directrices")
+        if self.a >= self.b:
+            value = self.a / e
+            return (("x", self.center.x + value), ("x", self.center.x - value))
+        value = self.b / e
+        return (("y", self.center.y + value), ("y", self.center.y - value))
     
     def contains(self, point: Point) -> bool:
         """Check if point is inside ellipse."""

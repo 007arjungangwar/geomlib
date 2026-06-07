@@ -86,6 +86,37 @@ class Line:
     def midpoint(self) -> Point:
         """Calculate midpoint of line segment."""
         return self.p1.midpoint(self.p2)
+
+    def contains_point(self, point: Point, *, segment: bool = False) -> bool:
+        """Check if a point lies on the infinite line or on the segment."""
+        cross = (point.y - self.p1.y) * (self.p2.x - self.p1.x) - (point.x - self.p1.x) * (self.p2.y - self.p1.y)
+        if not math.isclose(cross, 0.0, abs_tol=1e-9):
+            return False
+        if not segment:
+            return True
+        return (min(self.p1.x, self.p2.x) - 1e-9 <= point.x <= max(self.p1.x, self.p2.x) + 1e-9 and
+                min(self.p1.y, self.p2.y) - 1e-9 <= point.y <= max(self.p1.y, self.p2.y) + 1e-9)
+
+    def equation_coefficients(self) -> tuple:
+        """Return (a, b, c) for ax + by + c = 0."""
+        a = self.p1.y - self.p2.y
+        b = self.p2.x - self.p1.x
+        c = self.p1.x * self.p2.y - self.p2.x * self.p1.y
+        return (a, b, c)
+
+    def angle_with(self, other: 'Line') -> float:
+        """Return the acute angle between two lines in degrees."""
+        if self.is_parallel(other):
+            return 0.0
+        if self.is_perpendicular(other):
+            return 90.0
+        if self.slope is None:
+            angle = math.degrees(math.atan(abs(1 / other.slope)))
+        elif other.slope is None:
+            angle = math.degrees(math.atan(abs(1 / self.slope)))
+        else:
+            angle = math.degrees(math.atan(abs((other.slope - self.slope) / (1 + self.slope * other.slope))))
+        return min(angle, 180 - angle)
     
     def point_at_distance(self, distance: float, from_start: bool = True) -> Point:
         """Get point at specified distance along the line."""

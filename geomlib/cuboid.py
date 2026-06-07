@@ -52,6 +52,10 @@ class Cuboid:
                      self.length * factor,
                      self.width * factor,
                      self.height * factor)
+
+    def translate(self, dx: float, dy: float, dz: float) -> 'Cuboid':
+        """Translate cuboid."""
+        return Cuboid(self.center.translate(dx, dy, dz), self.length, self.width, self.height)
     
     def __repr__(self) -> str:
         return f"Cuboid(center={self.center}, length={self.length}, width={self.width}, height={self.height})"

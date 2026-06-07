@@ -1,26 +1,43 @@
 [project]
 name = "geomlib-advanced"
-version = "0.0.2"
+version = "0.1.0"
 description = """
-Complete 2D shapes (Point, Line, Circle, Rectangle, Square, Rhombus, Parallelogram, Triangle, Ellipse)
-Complete 3D shapes (Point3D, Sphere, Cube, Cuboid, Cylinder, Cone)
-Mathematical operations (area, perimeter, volume, surface area)
-Geometric relations (intersection, containment, distance)
-Transformations (translation, rotation, scaling)
-Vector operations (dot, cross, magnitude, normalization)
+Professional 2D and 3D geometry toolkit with shapes, vectors, conics, transformations, coordinate geometry, and analytic 3D formulas.
 """
 authors = [
   {name="Arjun Singh Gangwar", email="arjungangwariitpkd@email.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.7"
+keywords = ["geometry", "math", "2d", "3d", "vectors", "conics", "coordinate-geometry"]
 
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
 
-dependencies = [
-"numpy",
-"scipy"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/007arjungangwar/geomlib"
+Repository = "https://github.com/007arjungangwar/geomlib"
+Issues = "https://github.com/007arjungangwar/geomlib/issues"
+
+[tool.setuptools.packages.find]
+include = [
+  "geomlib*",
 ]
 
 [build-system]

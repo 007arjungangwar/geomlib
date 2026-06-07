@@ -8,6 +8,9 @@ class Triangle:
         self.a = a
         self.b = b
         self.c = c
+        ab, bc, ca = self.side_lengths()
+        if ab + bc <= ca or bc + ca <= ab or ca + ab <= bc:
+            raise ValueError("Points must form a non-degenerate triangle")
     
     def side_lengths(self) -> tuple:
         """Calculate lengths of all sides."""
@@ -20,7 +23,7 @@ class Triangle:
         """Calculate area using Heron's formula."""
         ab, bc, ca = self.side_lengths()
         s = (ab + bc + ca) / 2
-        return math.sqrt(s * (s - ab) * (s - bc) * (s - ca))
+        return math.sqrt(max(0.0, s * (s - ab) * (s - bc) * (s - ca)))
     
     def perimeter(self) -> float:
         """Calculate perimeter."""
@@ -83,23 +86,36 @@ class Triangle:
         ab, bc, ca = self.side_lengths()
         perimeter = ab + bc + ca
         
-        x = (ab * self.a.x + bc * self.b.x + ca * self.c.x) / perimeter
-        y = (ab * self.a.y + bc * self.b.y + ca * self.c.y) / perimeter
+        x = (bc * self.a.x + ca * self.b.x + ab * self.c.x) / perimeter
+        y = (bc * self.a.y + ca * self.b.y + ab * self.c.y) / perimeter
         
         return Point(x, y)
+
+    def circumradius(self) -> float:
+        """Calculate circumradius."""
+        ab, bc, ca = self.side_lengths()
+        return ab * bc * ca / (4 * self.area())
+
+    def inradius(self) -> float:
+        """Calculate inradius."""
+        return 2 * self.area() / self.perimeter()
+
+    def orthocenter(self) -> Point:
+        """Calculate orthocenter."""
+        circumcenter = self.circumcenter()
+        return Point(self.a.x + self.b.x + self.c.x - 2 * circumcenter.x,
+                     self.a.y + self.b.y + self.c.y - 2 * circumcenter.y)
     
     def contains(self, point: Point) -> bool:
         """Check if point is inside triangle using barycentric coordinates."""
-        # Calculate areas
-        area_total = self.area()
-        if area_total == 0:
-            return False
-        
-        area1 = Triangle(point, self.b, self.c).area()
-        area2 = Triangle(self.a, point, self.c).area()
-        area3 = Triangle(self.a, self.b, point).area()
-        
-        return math.isclose(area1 + area2 + area3, area_total)
+        denominator = ((self.b.y - self.c.y) * (self.a.x - self.c.x) +
+                       (self.c.x - self.b.x) * (self.a.y - self.c.y))
+        alpha = ((self.b.y - self.c.y) * (point.x - self.c.x) +
+                 (self.c.x - self.b.x) * (point.y - self.c.y)) / denominator
+        beta = ((self.c.y - self.a.y) * (point.x - self.c.x) +
+                (self.a.x - self.c.x) * (point.y - self.c.y)) / denominator
+        gamma = 1 - alpha - beta
+        return alpha >= -1e-9 and beta >= -1e-9 and gamma >= -1e-9
     
     def __repr__(self) -> str:
         return f"Triangle({self.a}, {self.b}, {self.c})"

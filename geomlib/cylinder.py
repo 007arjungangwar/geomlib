@@ -41,6 +41,10 @@ class Cylinder:
         return Cylinder(self.center, 
                        self.radius * factor,
                        self.height * factor)
+
+    def translate(self, dx: float, dy: float, dz: float) -> 'Cylinder':
+        """Translate cylinder."""
+        return Cylinder(self.center.translate(dx, dy, dz), self.radius, self.height)
     
     def __repr__(self) -> str:
         return f"Cylinder(center={self.center}, radius={self.radius}, height={self.height})"

@@ -90,6 +90,8 @@ class Point3D:
     
     def __mul__(self, scalar: float) -> 'Point3D':
         return Point3D(self.x * scalar, self.y * scalar, self.z * scalar)
+
+    __rmul__ = __mul__
     
     def __truediv__(self, scalar: float) -> 'Point3D':
         return Point3D(self.x / scalar, self.y / scalar, self.z / scalar)

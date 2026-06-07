@@ -31,7 +31,53 @@ class Circle:
     def intersects(self, other: 'Circle') -> bool:
         """Check if circles intersect."""
         distance = self.center.distance_to(other.center)
-        return distance <= self.radius + other.radius
+        return abs(self.radius - other.radius) <= distance <= self.radius + other.radius
+
+    def relation_to_circle(self, other: 'Circle') -> str:
+        """Describe the relationship between two circles."""
+        distance = self.center.distance_to(other.center)
+        if math.isclose(distance, 0.0) and math.isclose(self.radius, other.radius):
+            return "coincident"
+        if distance > self.radius + other.radius:
+            return "separate"
+        if math.isclose(distance, self.radius + other.radius):
+            return "externally_tangent"
+        if distance < abs(self.radius - other.radius):
+            return "contained"
+        if math.isclose(distance, abs(self.radius - other.radius)):
+            return "internally_tangent"
+        return "intersecting"
+
+    def line_intersections(self, line) -> tuple:
+        """Return intersection points with a 2D Line."""
+        from .line import Line
+
+        if not isinstance(line, Line):
+            raise TypeError("line must be a Line instance")
+
+        dx = line.p2.x - line.p1.x
+        dy = line.p2.y - line.p1.y
+        fx = line.p1.x - self.center.x
+        fy = line.p1.y - self.center.y
+
+        a = dx * dx + dy * dy
+        b = 2 * (fx * dx + fy * dy)
+        c = fx * fx + fy * fy - self.radius * self.radius
+        discriminant = b * b - 4 * a * c
+
+        if discriminant < -1e-9:
+            return ()
+        if math.isclose(discriminant, 0.0, abs_tol=1e-9):
+            t = -b / (2 * a)
+            return (Point(line.p1.x + t * dx, line.p1.y + t * dy),)
+
+        root = math.sqrt(discriminant)
+        t1 = (-b - root) / (2 * a)
+        t2 = (-b + root) / (2 * a)
+        return (
+            Point(line.p1.x + t1 * dx, line.p1.y + t1 * dy),
+            Point(line.p1.x + t2 * dx, line.p1.y + t2 * dy),
+        )
     
     def intersection_area(self, other: 'Circle') -> float:
         """Calculate intersection area with another circle."""

@@ -55,22 +55,16 @@ class Parallelogram:
                     (self.base_point.y + self.p3.y) / 2)
     
     def contains(self, point: Point) -> bool:
-        """Check if point is inside parallelogram using barycentric coordinates."""
-        v0 = self.p3 - self.base_point
-        v1 = self.p4 - self.base_point
-        v2 = point - self.base_point
-        
-        dot00 = v0.x * v0.x + v0.y * v0.y
-        dot01 = v0.x * v1.x + v0.y * v1.y
-        dot02 = v0.x * v2.x + v0.y * v2.y
-        dot11 = v1.x * v1.x + v1.y * v1.y
-        dot12 = v1.x * v2.x + v1.y * v2.y
-        
-        inv_denom = 1 / (dot00 * dot11 - dot01 * dot01)
-        u = (dot11 * dot02 - dot01 * dot12) * inv_denom
-        v = (dot00 * dot12 - dot01 * dot02) * inv_denom
-        
-        return (u >= 0) and (v >= 0) and (u + v <= 1)
+        """Check if point is inside the parallelogram."""
+        base = self.p2 - self.base_point
+        side = self.p4 - self.base_point
+        target = point - self.base_point
+
+        determinant = base.x * side.y - base.y * side.x
+        u = (target.x * side.y - target.y * side.x) / determinant
+        v = (base.x * target.y - base.y * target.x) / determinant
+
+        return -1e-9 <= u <= 1 + 1e-9 and -1e-9 <= v <= 1 + 1e-9
     
     def __repr__(self) -> str:
         return f"Parallelogram(base_point={self.base_point}, base={self.base_length}, side={self.side_length}, angle={self.angle_deg}°)"
