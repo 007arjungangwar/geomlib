@@ -18,6 +18,7 @@ geomlib/point.py
 geomlib/point3d.py
 geomlib/polygon.py
 geomlib/rectangle.py
+geomlib/relations.py
 geomlib/rhombus.py
 geomlib/sphere.py
 geomlib/square.py

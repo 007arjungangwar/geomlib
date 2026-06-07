@@ -41,6 +41,26 @@ class Line3D:
             return self.distance_to_point(other.point)
         return abs(between.dot(cross)) / cross.magnitude()
 
+    def relation_to_sphere(self, sphere):
+        """Classify this line as outside, tangent, or secant to a sphere."""
+        from .relations import line_sphere_relation
+
+        return line_sphere_relation(self, sphere)
+
+    def sphere_intersections(self, sphere):
+        """Return intersection points with a sphere."""
+        from .relations import line_sphere_intersections
+
+        return line_sphere_intersections(self, sphere)
+
+    def is_tangent_to_sphere(self, sphere) -> bool:
+        """Return True if this line touches the sphere at exactly one point."""
+        return self.relation_to_sphere(sphere).kind == "tangent"
+
+    def is_secant_to_sphere(self, sphere) -> bool:
+        """Return True if this line cuts the sphere at two points."""
+        return self.relation_to_sphere(sphere).kind == "secant"
+
     def __repr__(self) -> str:
         return f"Line3D(point={self.point}, direction={self.direction})"
 

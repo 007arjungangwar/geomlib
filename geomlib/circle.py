@@ -78,6 +78,51 @@ class Circle:
             Point(line.p1.x + t1 * dx, line.p1.y + t1 * dy),
             Point(line.p1.x + t2 * dx, line.p1.y + t2 * dy),
         )
+
+    def relation_to_line(self, line):
+        """Classify how an infinite line relates to this circle."""
+        from .relations import line_circle_relation
+
+        return line_circle_relation(line, self)
+
+    def relation_to_segment(self, segment):
+        """Classify how a finite line segment relates to this circle."""
+        from .relations import segment_circle_relation
+
+        return segment_circle_relation(segment, self)
+
+    def is_tangent_to_line(self, line) -> bool:
+        """Return True if the line touches this circle at exactly one point."""
+        return self.relation_to_line(line).kind == "tangent"
+
+    def is_secant_to_line(self, line) -> bool:
+        """Return True if the line cuts this circle at two points."""
+        return self.relation_to_line(line).kind == "secant"
+
+    def chord_length_from_line(self, line) -> float:
+        """Return chord length cut by a secant line, or 0 for tangent/outside."""
+        relation = self.relation_to_line(line)
+        if relation.kind != "secant":
+            return 0.0
+        return relation.intersections[0].distance_to(relation.intersections[1])
+
+    def circle_intersections(self, other: 'Circle') -> tuple:
+        """Return finite intersection points with another circle."""
+        from .relations import circle_intersection_points
+
+        return circle_intersection_points(self, other)
+
+    def relation(self, other):
+        """Classify this circle against a Line, segment-like Line, or Circle."""
+        from .line import Line
+
+        if isinstance(other, Circle):
+            from .relations import circle_circle_relation
+
+            return circle_circle_relation(self, other)
+        if isinstance(other, Line):
+            return self.relation_to_line(other)
+        raise TypeError("Unsupported relation target")
     
     def intersection_area(self, other: 'Circle') -> float:
         """Calculate intersection area with another circle."""

@@ -117,6 +117,32 @@ class Line:
         else:
             angle = math.degrees(math.atan(abs((other.slope - self.slope) / (1 + self.slope * other.slope))))
         return min(angle, 180 - angle)
+
+    def relation_to_circle(self, circle):
+        """Classify this infinite line as outside, tangent, or secant to a circle."""
+        from .relations import line_circle_relation
+
+        return line_circle_relation(self, circle)
+
+    def segment_relation_to_circle(self, circle):
+        """Classify this finite segment against a circle."""
+        from .relations import segment_circle_relation
+
+        return segment_circle_relation(self, circle)
+
+    def relation_to_rectangle(self, rectangle, *, segment: bool = False):
+        """Classify this line or segment against an axis-aligned rectangle."""
+        from .relations import line_rectangle_relation
+
+        return line_rectangle_relation(self, rectangle, segment=segment)
+
+    def is_tangent_to_circle(self, circle) -> bool:
+        """Return True if this line touches a circle at exactly one point."""
+        return self.relation_to_circle(circle).kind == "tangent"
+
+    def is_secant_to_circle(self, circle) -> bool:
+        """Return True if this line cuts a circle at two points."""
+        return self.relation_to_circle(circle).kind == "secant"
     
     def point_at_distance(self, distance: float, from_start: bool = True) -> Point:
         """Get point at specified distance along the line."""

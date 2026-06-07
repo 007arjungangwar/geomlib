@@ -22,6 +22,17 @@ from .cone import Cone
 from .vector import Vector2D, Vector3D
 from .polygon import Polygon, regular_polygon
 from .conics import Parabola, Hyperbola
+from .relations import (
+    RelationResult,
+    point_circle_relation,
+    line_circle_relation,
+    segment_circle_relation,
+    circle_circle_relation,
+    circle_intersection_points,
+    line_rectangle_relation,
+    line_sphere_relation,
+    line_sphere_intersections,
+)
 from .analytics import Line3D, Plane, distance_between_points, section_formula
 from .transformations import (
     translate_points,
@@ -47,7 +58,11 @@ __all__ = [
     'Point', 'Line', 'Circle', 'Square', 'Rectangle', 'Rhombus',
     'Parallelogram', 'Triangle', 'Ellipse', 'Point3D', 'Sphere',
     'Cube', 'Cuboid', 'Cylinder', 'Cone', 'Vector2D', 'Vector3D',
-    'Polygon', 'regular_polygon', 'Parabola', 'Hyperbola', 'Line3D',
+    'Polygon', 'regular_polygon', 'Parabola', 'Hyperbola', 'RelationResult',
+    'point_circle_relation', 'line_circle_relation', 'segment_circle_relation',
+    'circle_circle_relation', 'circle_intersection_points',
+    'line_rectangle_relation', 'line_sphere_relation',
+    'line_sphere_intersections', 'Line3D',
     'Plane', 'distance_between_points', 'section_formula',
     'translate_points', 'rotate_points', 'scale_points', 'reflect_point_x',
     'reflect_point_y', 'reflect_point_origin', 'translate_points3d',
@@ -56,4 +71,4 @@ __all__ = [
     'midpoint_2d'
 ]
 
-__version__ = "0.1.1"
+__version__ = "0.2.0"

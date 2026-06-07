@@ -45,6 +45,10 @@ from geomlib import (
     Point3D, Sphere, Cube, Cuboid, Cylinder, Cone,
     Vector2D, Vector3D, Line3D, Plane,
     Parabola, Hyperbola,
+    RelationResult,
+    point_circle_relation, line_circle_relation, segment_circle_relation,
+    circle_circle_relation, circle_intersection_points,
+    line_rectangle_relation, line_sphere_relation, line_sphere_intersections,
     distance_between_points, section_formula,
     translate_points, rotate_points, scale_points,
     reflect_point_x, reflect_point_y, reflect_point_origin, translate_points3d,
@@ -117,7 +121,7 @@ Vector2D supports `+`, `-`, `* scalar`, and `/ scalar`.
 Create a line from two points.
 
 ```python
-from geomlib import Point, Line
+from geomlib import Point, Line, Circle
 
 line1 = Line(Point(0, 0), Point(4, 4))
 line2 = Line(Point(0, 4), Point(4, 0))
@@ -136,6 +140,12 @@ print(line1.contains_point(Point(5, 5), segment=True))
 print(line1.equation_coefficients())  # (a, b, c) for ax + by + c = 0
 print(line1.angle_with(line2))
 print(line1.point_at_distance(2))
+
+circle = Circle(Point(0, 0), 5)
+print(line1.relation_to_circle(circle))
+print(line1.is_tangent_to_circle(circle))
+print(line1.is_secant_to_circle(circle))
+print(line1.segment_relation_to_circle(circle))
 ```
 
 ## Circles
@@ -155,8 +165,98 @@ print(c1.relation_to_circle(c2))   # separate, tangent, intersecting, contained,
 print(c1.intersection_area(c2))
 print(c1.tangent_points(Point(10, 0)))
 print(c1.line_intersections(Line(Point(-10, 0), Point(10, 0))))
+print(c1.relation_to_line(Line(Point(-10, 5), Point(10, 5))))
+print(c1.relation_to_segment(Line(Point(0, 0), Point(10, 0))))
+print(c1.is_tangent_to_line(Line(Point(-10, 5), Point(10, 5))))
+print(c1.is_secant_to_line(Line(Point(-10, 0), Point(10, 0))))
+print(c1.chord_length_from_line(Line(Point(-10, 0), Point(10, 0))))
+print(c1.circle_intersections(Circle(Point(8, 0), 5)))
+print(c1.relation(Circle(Point(8, 0), 5)))
 print(c1.scale(2))
 print(c1.translate(1, 2))
+```
+
+## Geometric Relations
+
+Relationship helpers return a `RelationResult`:
+
+```python
+RelationResult(
+    kind="tangent",
+    intersections=(Point(0, 5),),
+    distance=5.0,
+    description="Line touches the circle at one point.",
+)
+```
+
+Use these fields:
+
+- `kind`: relation name such as `"outside"`, `"tangent"`, `"secant"`, `"segment_crossing"`, `"intersecting"`
+- `intersections`: contact or intersection points
+- `distance`: useful separating distance when available
+- `description`: human-readable explanation
+- `count`: number of returned points
+- `touches`: `True` for tangent/touching relations
+- `cuts`: `True` for secant/crossing relations
+- `disjoint`: `True` when objects do not meet
+
+Line and circle:
+
+```python
+from geomlib import Point, Line, Circle, line_circle_relation, segment_circle_relation
+
+circle = Circle(Point(0, 0), 5)
+tangent = Line(Point(-10, 5), Point(10, 5))
+secant = Line(Point(-10, 0), Point(10, 0))
+outside = Line(Point(-10, 6), Point(10, 6))
+
+print(line_circle_relation(tangent, circle).kind)  # tangent
+print(line_circle_relation(secant, circle).kind)   # secant
+print(line_circle_relation(outside, circle).kind)  # outside
+
+relation = circle.relation_to_line(secant)
+print(relation.kind)
+print(relation.intersections)
+print(relation.cuts)
+
+segment = Line(Point(0, 0), Point(10, 0))
+print(segment_circle_relation(segment, circle).kind)  # segment_crossing
+```
+
+Point and circle:
+
+```python
+from geomlib import point_circle_relation
+
+print(point_circle_relation(Point(0, 0), circle).kind)  # inside_circle
+print(point_circle_relation(Point(5, 0), circle).kind)  # on_circle
+print(point_circle_relation(Point(6, 0), circle).kind)  # outside_circle
+```
+
+Circle and circle:
+
+```python
+from geomlib import circle_circle_relation, circle_intersection_points
+
+c1 = Circle(Point(0, 0), 5)
+c2 = Circle(Point(8, 0), 5)
+
+relation = circle_circle_relation(c1, c2)
+print(relation.kind)           # intersecting
+print(relation.intersections)  # two common points
+print(circle_intersection_points(c1, c2))
+```
+
+Line and rectangle:
+
+```python
+from geomlib import Rectangle, line_rectangle_relation
+
+rect = Rectangle(Point(0, 0), 4, 3)
+line = Line(Point(-1, 1), Point(5, 1))
+
+print(line_rectangle_relation(line, rect).kind)      # cutting
+print(line.relation_to_rectangle(rect).intersections)
 ```
 
 ## Rectangles and Squares
@@ -334,16 +434,24 @@ Point3D and Vector3D support `+`, `-`, `* scalar`, and `/ scalar`.
 ## 3D Lines and Planes
 
 ```python
-from geomlib import Point3D, Vector3D, Line3D, Plane
+from geomlib import Point3D, Vector3D, Line3D, Plane, Sphere
 
 line1 = Line3D(Point3D(0, 0, 0), Vector3D(1, 1, 1))
 line2 = Line3D.from_points(Point3D(0, 1, 0), Point3D(1, 2, 1))
+secant_line = Line3D(Point3D(-10, 0, 0), Vector3D(1, 0, 0))
+tangent_line = Line3D(Point3D(-10, 5, 0), Vector3D(1, 0, 0))
+sphere = Sphere(Point3D(0, 0, 0), 5)
 
 print(line1.point_at(2))
 print(line1.distance_to_point(Point3D(1, 0, 0)))
 print(line1.is_parallel(line2))
 print(line1.angle_with(line2))
 print(line1.shortest_distance_to_line(line2))
+print(secant_line.relation_to_sphere(sphere).kind)   # secant
+print(secant_line.sphere_intersections(sphere))
+print(tangent_line.relation_to_sphere(sphere).kind)  # tangent
+print(tangent_line.is_tangent_to_sphere(sphere))
+print(secant_line.is_secant_to_sphere(sphere))
 
 plane1 = Plane(0, 0, 1, -2)  # z - 2 = 0
 plane2 = Plane.from_point_normal(Point3D(0, 0, 2), Vector3D(0, 0, 1))
@@ -482,12 +590,14 @@ print(translate_points3d([Point3D(1, 2, 3)], 1, 1, 1))
 - Triangles must be non-degenerate.
 - Polygon vertices must be ordered and must enclose non-zero area.
 - Division by zero raises the normal Python exception or a `ValueError`, depending on context.
+- Relation helpers use a small numeric tolerance, so tangent checks are stable for floating-point calculations.
 
 ## Curriculum Coverage
 
 GeomLib Advanced supports common CBSE, ICSE, and NCERT geometry topics:
 
 - Class 10 coordinate geometry: distance, midpoint, section formula, slope, line equations
+- Class 10 circle geometry: non-intersecting lines, tangents, secants, common points
 - Class 10 mensuration: triangle, quadrilateral, circle, cube, cuboid, cylinder, cone, sphere
 - Class 11 straight lines: slopes, angles, parallel/perpendicular checks, line equations
 - Class 11 conic sections: circle, ellipse, parabola, hyperbola
