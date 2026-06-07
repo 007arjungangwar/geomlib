@@ -1,6 +1,6 @@
 [project]
 name = "geomlib-advanced"
-version = "0.1.0"
+version = "0.1.1"
 description = "Professional 2D and 3D geometry toolkit with shapes, vectors, conics, transformations, coordinate geometry, and analytic 3D formulas."
 authors = [
   {name="Arjun Singh Gangwar", email="arjungangwariitpkd@email.com"}
